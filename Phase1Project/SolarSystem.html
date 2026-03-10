@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System</title>
+    <script src="https://unpkg.com/three@0.146.0/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.146.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .infoBox {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 220px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* stylish wala font de */
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            backdrop-filter: blur(8px);
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        //bhai ye planets pass pass ho gaye hai iska distance badhai kyuki orbit ke liye space chahiye hota hai, bohot pss dikh rahahia 
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 250;
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.append(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        const textureLoader = new THREE.TextureLoader();
+        const sunTexture = textureLoader.load('wEgyp7LXOyKJklUycaxcn_1KkvF4RLT1SFftoplWYMqNWuhtD6KGDB8MsgsrJN4ru8HeOSc6YuMhm0CWd9TGQrUJAbeFBJgSSRVXpjk292A.jpg')
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const sun = new THREE.Mesh(
+            new THREE.SphereGeometry(),
+            new THREE.MeshBasicMaterial({ map: sunTexture })
+        )
+
+        const sunLight = new THREE.PointLight(0xffffff, 2, 100);
+        scene.add(sunLight)
+        sun.position.x = 0;
+        sun.scale.set(2.5, 2.5, 2.5);
+        scene.add(sun);
+
+        const mercuryPivot = new THREE.Group();
+        scene.add(mercuryPivot);
+        const mercuryTexture = textureLoader.load('PIA17386-1.jpg');
+
+        const mercury = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            // SphereGeometry(radius, widthSegments, heightSegments)
+            new THREE.MeshStandardMaterial({ map: mercuryTexture })
+        )
+        mercury.position.x = -10;
+        mercury.scale.set(1, 1, 1);
+        mercuryPivot.add(mercury);
+
+        const venusPivot = new THREE.Group();
+        scene.add(venusPivot);
+
+        const venusTexture = textureLoader.load('Solarsystemscope_texture_8k_venus_surface.jpg')
+        const venus = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: venusTexture })
+        )
+        venus.position.x = -14;
+        //sabka size badha
+        venus.scale.set(1.2, 1.2, 1.2);
+        venusPivot.add(venus);
+
+        const earthPivot = new THREE.Group();
+        scene.add(earthPivot);
+
+        const earthTexture = textureLoader.load('Solarsystemscope_texture_2k_earth_daymap.jpg');
+        const earth = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: earthTexture })
+        )
+        earth.position.x = -18;
+        earth.scale.set(1.3, 1.3, 1.3);
+        earthPivot.add(earth);
+
+        const marsPivot = new THREE.Group();
+        scene.add(marsPivot);
+
+        const marsTexture = textureLoader.load('ZcUZsYy1xATNu8lvkPBbFuApExXqCpp5WfLd93UzVfMapHtcu0Omy4Q4A_1_lYeHRqr5GUu-2d4EtLrz4TitCGnK2qfRsbrjJwwSPUUpG3Y.jpg');
+        const mars = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: marsTexture })
+        )
+
+        mars.position.x = -22;
+        mars.scale.set(1.1, 1.1, 1.1);
+        marsPivot.add(mars);
+
+        const jupiterPivot = new THREE.Group();
+        scene.add(jupiterPivot);
+
+        const jupiterTexture = textureLoader.load('jupiter.jpg');
+        const jupiter = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: jupiterTexture })
+        )
+        jupiter.position.x = -26;
+        jupiter.scale.set(1.8, 1.8, 1.8);
+        jupiterPivot.add(jupiter);
+
+        const saturnPivot = new THREE.Group();
+        scene.add(saturnPivot)
+        const saturnTexture = textureLoader.load('saturn.jpg');
+        const saturn = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: saturnTexture })
+        )
+        saturn.position.x = -30;
+        saturn.scale.set(1, 1, 1);
+        saturnPivot.add(saturn);
+
+        const uranusPivot = new THREE.Group();
+        scene.add(uranusPivot);
+        const uranusTexture = textureLoader.load('uranus.jpg');
+        const uranus = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: uranusTexture })
+        );
+        uranus.position.x = -34;
+        uranus.scale.set(0.9, 0.9, 0.9);
+        uranusPivot.add(uranus);
+
+        const neptunePivot = new THREE.Group();
+        scene.add(neptunePivot);
+        const neptuneTexture = textureLoader.load('neptune.jpg');
+        const neptune = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: neptuneTexture })
+        );
+        neptune.position.x = -38;
+        neptune.scale.set(0.9, 0.9, 0.9);
+        neptunePivot.add(neptune);
+
+
+        const plutoPivot = new THREE.Group();
+        scene.add(plutoPivot);
+        const plutoTexture = textureLoader.load('pluto.jpg');
+        const pluto = new THREE.Mesh(
+            new THREE.SphereGeometry(0.5, 64, 64),
+            new THREE.MeshStandardMaterial({ map: plutoTexture })
+        );
+        pluto.scale.set(0.4, 0.4, 0.4);
+        pluto.position.x = -42;
+        pluto.scale.set(0.4, 0.4, 0.4);
+        plutoPivot.add(pluto);
+
+        const saturnRing = new THREE.Mesh(
+            new THREE.RingGeometry(0.8, 1.6, 74),
+            new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.5
+            })
+        )
+        saturnRing.rotation.x = -Math.PI / 3;
+        saturn.add(saturnRing);
+
+        //sabka orbit uss hisab se badhaiye taki planets pass pass na dikhai de
+
+        const plutoOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(41.9, 42, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+        plutoOrbit.rotation.x = -Math.PI / 2;
+        plutoOrbit.position.y = -0.01;
+        scene.add(plutoOrbit)
+
+        const neptuneOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(37.9, 38, 54),
+            new THREE.MeshStandardMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.4
+            })
+        )
+        neptuneOrbit.position.y = -0.01;
+        neptuneOrbit.rotation.x = Math.PI / 2;
+        scene.add(neptuneOrbit);
+
+
+        // RingGeometry(innerRadius, outerRadius, segments)
+
+        const saturnorbitMesh = new THREE.Mesh(
+            new THREE.RingGeometry(29.9, 30, 74),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+        saturnorbitMesh.rotation.x = Math.PI / 2;
+        saturnorbitMesh.position.y = -0.01;
+        scene.add(saturnorbitMesh);
+
+        const jupiterOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(25.9, 26, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+        jupiterOrbit.position.y = -0.01;
+        jupiterOrbit.rotation.x = Math.PI / 2;
+        scene.add(jupiterOrbit);
+
+        const marsOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(21.9, 22, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+
+        marsOrbit.position.y = -0.01
+        marsOrbit.rotation.x = Math.PI / 2;
+        scene.add(marsOrbit)
+
+
+        const venusOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(13.9, 14, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+        venusOrbit.position.y = -0.01;
+        venusOrbit.rotation.x = Math.PI / 2;
+        scene.add(venusOrbit)
+
+        const mercuryOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(9.9, 10, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+
+        mercuryOrbit.position.y = -0.01;
+        mercuryOrbit.rotation.x = Math.PI / 2;
+        scene.add(mercuryOrbit)
+
+        const uranusOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(33.9, 34, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            })
+        )
+
+        uranusOrbit.position.y = -0.01;
+        uranusOrbit.rotation.x = Math.PI / 2;
+        scene.add(uranusOrbit)
+
+
+        const earthOrbit = new THREE.Mesh(
+            new THREE.RingGeometry(17.9, 18, 54),
+            new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            }))
+
+        earthOrbit.position.y = -0.01;
+        earthOrbit.rotation.x = Math.PI / 2;
+        scene.add(earthOrbit);
+
+        // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const raycaster = new THREE.Raycaster(); //invisble laser gun
+        const mouse = new THREE.Vector2();
+        //vector 2 matalb x and y
+        window.addEventListener("mousemove", (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        })
+
+        let currentPlanet = null;
+
+        const infoBox = document.querySelector(".infoBox");
+        const planetData = {
+            Earth: "Distance: 149.6 million km\nRevolution: 365 days\nSpeed: 29.78 km/s",
+            Mars: "Distance: 227.9 million km\nRevolution: 687 days\nSpeed: 24 km/s",
+            Venus: "Distance: 108.2 million km\nRevolution: 225 days\nSpeed: 35 km/s",
+            Mercury: "Distance: 57.9 million km\nRevolution: 88 days\nSpeed: 47 km/s",
+            Jupiter: "Distance: 778.5 million km\nRevolution: 12 years\nSpeed: 13 km/s",
+            Saturn: "Distance: 1.4 billion km\nRevolution: 29 years\nSpeed: 9.7 km/s",
+            Uranus: "Distance: 2.9 billion km\nRevolution: 84 years\nSpeed: 6.8 km/s",
+            Neptune: "Distance: 4.5 billion km\nRevolution: 165 years\nSpeed: 5.4 km/s",
+            Pluto: "Distance: 5.9 billion km\nRevolution: 248 years\nSpeed: 4.7 km/s"
+        };
+        earth.name = "Earth";
+        mars.name = "Mars";
+        venus.name = "Venus";
+        mercury.name = "Mercury";
+        jupiter.name = "Jupiter";
+        saturn.name = "Saturn";
+        uranus.name = "Uranus";
+        neptune.name = "Neptune";
+        pluto.name = "Pluto";
+
+        const orbitMap = {
+            Earth: earthOrbit,
+            Mars: marsOrbit,
+            Venus: venusOrbit,
+            Mercury: mercuryOrbit,
+            Jupiter: jupiterOrbit,
+            Saturn: saturnorbitMesh,
+            Uranus: uranusOrbit,
+            Neptune: neptuneOrbit,
+            Pluto: plutoOrbit
+        };
+        const starGeometry = new THREE.BufferGeometry();//empty container
+
+        const starVertices = [];
+
+        for (let i = 0; i < 10000; i++) {
+
+            starVertices.push(
+                (Math.random() - 0.5) * 2000,
+                (Math.random() - 0.5) * 2000,
+                (Math.random() - 0.5) * 2000
+            )
+
+        }
+
+        starGeometry.setAttribute(
+            "position",
+            new THREE.Float32BufferAttribute(starVertices, 3)
+        )
+
+        const starMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 1
+        })
+
+        const stars = new THREE.Points(starGeometry, starMaterial)
+
+        scene.add(stars)
+
+
+        function animate() {
+
+            requestAnimationFrame(animate)
+            sun.rotation.y += 0.00417;
+            mercuryPivot.rotation.y += 0.024;
+            mercury.rotation.y += 0.02;
+            venusPivot.rotation.y += 0.016;
+            venus.rotation.y += 0.015;
+            earthPivot.rotation.y += 0.01;
+            earth.rotation.y += 0.01;
+            marsPivot.rotation.y += 0.008;
+            mars.rotation.y += 0.008;
+            jupiterPivot.rotation.y += 0.0024;
+            jupiter.rotation.y += 0.0024;
+            saturnPivot.rotation.y += 0.0014;
+            saturn.rotation.y += 0.0014;
+            uranusPivot.rotation.y += 0.0007;
+            uranus.rotation.y += 0.0007;
+            neptunePivot.rotation.y += 0.0005;
+            neptune.rotation.y += 0.0005;
+            plutoPivot.rotation.y += 0.0002;
+            pluto.rotation.y += 0.0002;
+            stars.rotation.y += 0.0005
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects([
+                mercury, venus, earth, mars, jupiter, saturn, uranus, neptune, pluto,
+            ]);
+
+            if (intersects.length > 0) {
+                const detectedPlanet = intersects[0].object;
+                if (detectedPlanet !== currentPlanet) {
+                    if (currentPlanet) {
+                        currentPlanet.scale.set(
+                            currentPlanet.userData.originalScale,
+                            currentPlanet.userData.originalScale,
+                            currentPlanet.userData.originalScale)
+                        currentPlanet.material.emissive.set(0x000000);
+                        orbitMap[currentPlanet.name].material.opacity = 0.2;
+                    }
+                    currentPlanet = detectedPlanet;
+                    if (!currentPlanet.userData.originalScale) {
+                        currentPlanet.userData.originalScale = currentPlanet.scale.x;
+                    }
+                    currentPlanet.scale.set(
+                        currentPlanet.userData.originalScale * 1.2,
+                        currentPlanet.userData.originalScale * 1.2,
+                        currentPlanet.userData.originalScale * 1.2
+                    )
+                    currentPlanet.material.emissive.set(0x444444);
+                    orbitMap[currentPlanet.name].material.opacity = 0.6;
+                }
+            } else {
+                if (currentPlanet) {
+                    currentPlanet.scale.set(
+                        currentPlanet.userData.originalScale,
+                        currentPlanet.userData.originalScale,
+                        currentPlanet.userData.originalScale
+                    )
+                    currentPlanet.material.emissive.set(0x000000);
+                    orbitMap[currentPlanet.name].material.opacity = 0.2;
+                    currentPlanet = null;
+                }
+            }
+
+
+
+            renderer.render(scene, camera)
+
+        }
+        animate();
+
+    </script>
+</body>
+
+</html>
